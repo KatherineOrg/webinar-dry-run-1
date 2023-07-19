@@ -6,29 +6,30 @@
 name: Create Issue after React passes tests
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
 jobs:
   build:
     runs-on: ubuntu-latest
     #define steps
     steps:
-    # First step is to checkout the code
-    - name: Checkout
-      uses: actions/checkout@v3
-    #Second step is to install dependencies
-    - name: Install Dependencies
-      run: npm install
-    #Third step is to build the React app
-    - name: Build
-      run: npm run build
-    #Fourth step is to run tests
-    - name: Test
-      run: npm run test
-    # Fifth step is to create an issue if the tests pass
-    if: ${{ success() }}
-    # use the github CLI to create an issue and separate this with the environment token
-    run: |
-      echo "Creating issue"
-      gh issue create --title "React App Passed Tests" --body "React App Passed Tests, awaiting approval"
-    env:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # First step is to checkout the code
+      - name: Checkout
+        uses: actions/checkout@v3
+      #Second step is to install dependencies
+      - name: Install Dependencies
+        run: npm install
+      #Third step is to build the React app
+      - name: Build
+        run: npm run build
+      #Fourth step is to run tests
+      - name: Test
+        run: npm run test
+        # Fifth step is to create an issue if the tests pass
+      - name: Create Issue
+        if: ${{ success() }}
+        # use the github CLI to create an issue and separate this with the environment token
+        run: |
+          echo "Creating issue"
+          gh issue create --title "React App Passed Tests" --body "React App Passed Tests, awaiting approval"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
